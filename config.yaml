@@ -1,0 +1,26 @@
+model:
+  model_id: "../models/openai/whisper-large-v3-turbo" # relative path from repo root path
+  torch_dtype: "auto"    # Options: "auto", "float16", "float32"
+  device_map: "auto"     # Options: "auto", "cpu", "cuda"
+  use_safetensors: true  # Use safetensors for secure loading
+
+pipeline:
+  source_language: "english"
+
+test:
+  audio_file: "audios/test_audio.mp3"
+  output_srt: "output/test_audio.srt"
+  output_txt: "output/test_audio.txt"
+  translated_srt: "output/test_audio_translated.srt"
+
+main:
+  audio_file: "audios/DiT-Explained.mp3"
+  output_srt: "output/DiT-Explained.srt"
+  output_txt: "output/DiT-Explained.txt"
+  translated_srt: "output/DiT-Explained_translated.srt"
+
+translation_model:
+  model_id: "../models/Helsinki-NLP/opus-mt-en-zh"  
+  torch_dtype: "auto"    # Options: "auto", "float16", "float32"
+  device_map: "cuda"     # Options: "auto", "cpu", "cuda"
+  max_length: 256  # Maximum length for the translated text

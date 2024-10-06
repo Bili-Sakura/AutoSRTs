@@ -1,0 +1,48 @@
+1
+00:00:00,000 --> 00:00:04,799
+ This video will be covering DIT or Diffusion Models with Transformers.
+
+2
+00:00:05,379 --> 00:00:10,099
+ For all our past diffusion videos, we have been working with a UNET architecture,
+
+3
+00:00:10,619 --> 00:00:15,919
+ where we had a series of encoder blocks, mid block and a series of up blocks,
+
+4
+00:00:16,539 --> 00:00:22,100
+ with skip connections between encoder and decoder blocks of same spatial resolution.
+
+5
+00:00:22,899 --> 00:00:27,920
+ The authors of DIT replaced this UNET architecture with a transformer,
+
+6
+00:00:00,000 --> 00:00:07,040
+ and similar to latent diffusion models, work on latent images rather than image in pixel space.
+
+7
+00:00:07,759 --> 00:00:12,619
+ For this, the authors base their architecture on Vision Transformer or VIT.
+
+8
+00:00:13,800 --> 00:00:18,660
+ The way we'll go about with this video is first to do a quick review of VIT.
+
+9
+00:00:19,260 --> 00:00:24,879
+ If you aren't familiar with VIT, then I've already covered it in detail in previous videos,
+
+10
+00:00:24,879 --> 00:00:27,260
+ so I would suggest to watch those first.
+
+11
+00:00:00,000 --> 00:00:04,500
+ Here, we'll only refresh some aspects of it.
+
+12
+00:00:04,500 --> 00:00:05,500
+ Then we'll refresh.
+
