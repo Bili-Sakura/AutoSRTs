@@ -2,7 +2,7 @@ import yaml
 from tqdm import tqdm
 from transformers import pipeline
 from utils import save_to_srt
-
+import re
 # Load configuration from config.yaml
 def load_config(config_path="config.yaml"):
     with open(config_path, 'r') as file:
@@ -10,40 +10,41 @@ def load_config(config_path="config.yaml"):
     return config
 
 
-def translate_text(text, config_path="config.yaml"):
+def translate_chunks_and_save_to_srt(chunks, output_srt, config_path="config.yaml"):
     # Load the configuration
     config = load_config(config_path)
 
     # Extract configuration parameters for readability
     model_config = config['translation_model']
 
-
-    translation_pipe = pipeline(
-        "translation", 
+    pipe = pipeline(
+        "text-generation", 
         model=model_config['model_id'], 
         torch_dtype=model_config['torch_dtype'],
         device_map=model_config['device_map'],
-        )
+    )
+    pipe.tokenizer.padding_side = "left"
 
-    # Perform translation
-    result = translation_pipe(text, max_length=model_config.get('max_length', 256))
+    # Prepare the batch of prompts
+    prompts = [f"You are a professional tranlator to assist me to translate the following english subtitle into chinese: '{chunk['text']}'. Output your translation result in json, with key as 'text'. " for chunk in chunks]
 
-    # Return the translated text
-    return result[0]['translation_text']
-
-
-def translate_chunks_and_save_to_srt(chunks, output_srt, config_path="config.yaml"):
-    # Translate each chunk and save to an SRT file
+    # Translate each chunk in batch and save to an SRT file
     translated_chunks = []
-    for idx in tqdm(range(len(chunks)), desc="Translation"):
-        translated_text = translate_text(chunks[idx]['text'], config_path)
-        translated_chunks.append({
-            'timestamp': chunks[idx]['timestamp'],
-            'text': translated_text
-        })
+    for idx in tqdm(range(0, len(prompts), model_config['batch_size']), desc="Translation"):
+        batch_prompts = prompts[idx:idx + model_config['batch_size']]
+        batch_results = pipe(batch_prompts, max_new_tokens=512, batch_size=model_config['batch_size'],temperature=0.001)
+        for result in batch_results:
+            match = re.search(r'"text":\s*"([^"]+)"', result[0]["generated_text"])
+            if match:
+                translated_text = match.group(1)
+                print(translated_text)
+            else:
+                print("No match found")
+            translated_chunks.append({
+                'timestamp': chunks[len(translated_chunks)]['timestamp'],
+                'text': translated_text
+            })
     
     # Save the translated chunks to an SRT file
-
     save_to_srt(translated_chunks, output_srt)
     print(f"Translated subtitles saved to {output_srt}")
-
