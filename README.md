@@ -2,22 +2,6 @@
 
 This project generates subtitles from audio using Automatic Speech Recognition (ASR) with Whisper and translates them using the LLMs.
 
-<!-- ## Project Structure
-- `src/`: Contains the main source code for ASR, translation, and subtitle generation.
-- `utils/`: Utility functions for the project.
-- `tests/`: Unit tests for the project.
-- `docs/`: Documentation for the project.
-
-## Setup
-Install the dependencies:
-```
-pip install -r requirements.txt
-```
-
-Run the main script:
-```
-python src/main.py example_audio.mp3 example_audio.srt zh
-``` -->
 
 ## To-Do List
 
