@@ -15,16 +15,16 @@ def transcribe_audio(configs):
         if model_config['flash_attention']:
             model = AutoModelForSpeechSeq2Seq.from_pretrained(
                 model_path,
-                # torch_dtype=model_config['torch_dtype'],
+                torch_dtype=model_config['torch_dtype'],
                 device_map=model_config['device_map'],
-                low_cpu_mem_usage=True, 
+                # low_cpu_mem_usage=True, 
                 attn_implementation="flash_attention_2"
             )
         elif is_torch_sdpa_available():
             model = AutoModelForSpeechSeq2Seq.from_pretrained(
                 model_path,
                 device_map=model_config['device_map'],
-                low_cpu_mem_usage=True, 
+                # low_cpu_mem_usage=True, 
                 attn_implementation="sdpa"
             )
         else:
@@ -43,16 +43,17 @@ def transcribe_audio(configs):
         model=model,
         tokenizer=processor.tokenizer,
         feature_extractor=processor.feature_extractor,
-        return_timestamps=True,
-        chunk_length_s=30,
+        return_timestamps='word',
         batch_size=model_config['batch_size'],  
     )
+    
+    # Perform transcription on the audio file with parameters from config
+    audio_file = configs["path_to_audio_file"]
+    result = pipe([audio_file])
+
     del pipe
     torch.cuda.empty_cache()  # Clears the GPU memory cache
 
-    # Perform transcription on the audio file with parameters from config
-    audio_file = configs["path_to_audio_file"]
-    result = pipe(audio_file)
 
     # Return the transcribed text and chunk information
-    return result["text"], result["chunks"]
+    return result[0]["text"], result[0]["chunks"]

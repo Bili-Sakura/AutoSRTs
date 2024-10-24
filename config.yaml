@@ -1,21 +1,20 @@
 asr_model:
   model_path: "../models/openai/whisper-large-v3-turbo" # relative path from repo root path
-  # torch_dtype: "auto" # Options: "auto", "float16", "float32"
+  torch_dtype: "auto" # Options: "auto", torch.float16, torch.float32
   device_map: "auto" # Options: "auto", "cpu", "cuda"
-  batch_size: 50
-  flash_attention: true
+  batch_size: 1
+  flash_attention: false
 
-path_to_audio_file: "audios/aSLDXdc2hkk.mp3"
-output_srt: "output/aSLDXdc2hkk.srt"
-translated_srt: "output/aSLDXdc2hkk_translated_awq.srt"
+path_to_audio_file: "audios/DoRA.mp3"
+output_srt: "output/DoRA.srt"
+translated_srt: "output/DoRA_translated_awq.srt"
 
 translation_model:
   source_language: "English"
   target_language: "Chinese"
-
   user_defined_rules: "Do not translate jargons or proper noun."
   model_path: "../models/Qwen/Qwen2.5-72B-Instruct-AWQ"
-  # torch_dtype: "auto" # Options: "auto", "float16", "float32"
+  torch_dtype: "auto" # Options: "auto", torch.float16, torch.float32
   device_map: "auto" # Options: "auto", "cpu", "cuda"
-  batch_size: 100
-  # max_length: 512  # Maximum length for the translated text
+  batch_size: 10
+  max_length: 512  # Maximum length for the translated text

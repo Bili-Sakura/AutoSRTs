@@ -4,59 +4,61 @@ from transformers import pipeline
 from utils import save_to_srt
 import re
 
+def calculate_time_ratio(segment, segment_word_count, words_used):
+    """
+    Calculate the adjusted time based on the number of words used in the ASR segment.
+    """
+    start_time, end_time = segment['timestamp']
+    duration = end_time - start_time
+    time_per_word = duration / segment_word_count
+    return words_used * time_per_word
 
+def resentence(segments):
+    """
+    Concatenate segments into sentences based on punctuation found within the segments.
+    """
+    restructured_segments = []
+    sentence_segments = []
+    sentence_start_time = None
 
+    # Define sentence-ending punctuation
+    sentence_endings = re.compile(r'[.!?。！？]$')  # Matches if text ends with punctuation
 
-def resentence(text, chunks):
-    # Step 1: Split the full subtitle text into sentences using '.'
-    sentences = text.split('.')
-    sentences = [s.strip() + '.' for s in sentences if s.strip()]  # Clean up and add back '.'
+    for segment in segments:
+        text = segment['text']
+        start_time, end_time = segment['timestamp']
 
-    re_chunks = []
-    sentence_idx = 0  # To track which sentence we're processing
-    
-    # Step 2: Iterate over each chunk
-    for chunk in chunks:
-        subtitle_seg = chunk['text']  # Original chunk text (could contain multiple sentences)
-        start_time = chunk['timestamp'][0]  # Start time of the chunk
-        end_time = chunk['timestamp'][1]    # End time of the chunk
-        chunk_duration = end_time - start_time  # Duration of this chunk
-        
-        # Step 3: Estimate how to split time proportionally for each sentence in this chunk
-        # Count total words in the chunk to distribute time proportionally
-        words_in_chunk = subtitle_seg.split(' ')
-        total_words = len(words_in_chunk)
-        
-        # Initialize current_time to start of chunk
-        current_time = start_time
-        
-        # Continue while there are sentences left to process and we are still in this chunk
-        while sentence_idx < len(sentences):
-            sentence = sentences[sentence_idx]  # Get the current sentence
-            
-            # Count words in the sentence to allocate proportional time
-            words_in_sentence = sentence.split(' ')
-            sentence_word_count = len(words_in_sentence)
-            
-            # Calculate the proportional time for this sentence based on word count
-            sentence_duration = chunk_duration * (sentence_word_count / total_words)
-            
-            # Create a new re_chunk for this sentence
-            re_chunk = {
-                'text': sentence,
-                'timestamp': [current_time, current_time + sentence_duration]
-            }
-            re_chunks.append(re_chunk)
-            
-            # Update current_time for the next sentence
-            current_time += sentence_duration
-            sentence_idx += 1  # Move to the next sentence
-            
-            # If the current sentence used up all the time in this chunk, break out of the loop
-            if current_time >= end_time:
-                break
+        # If starting a new sentence, set the start time
+        if not sentence_segments:
+            sentence_start_time = start_time
 
-    return re_chunks
+        sentence_segments.append(segment)
+
+        # Check if the current segment ends with sentence-ending punctuation
+        if sentence_endings.search(text):
+            # Concatenate the texts of the segments to form the sentence
+            sentence_text = ' '.join(s['text'] for s in sentence_segments).strip()
+
+            # The sentence ends here; create a new segment
+            restructured_segments.append({
+                'timestamp': (sentence_start_time, end_time),
+                'text': sentence_text
+            })
+
+            # Reset for the next sentence
+            sentence_segments = []
+            sentence_start_time = None
+
+    # Handle any remaining segments that didn't end with punctuation
+    if sentence_segments:
+        sentence_text = ' '.join(s['text'] for s in sentence_segments).strip()
+        end_time = sentence_segments[-1]['timestamp'][1]
+        restructured_segments.append({
+            'timestamp': (sentence_start_time, end_time),
+            'text': sentence_text
+        })
+
+    return restructured_segments
 
 
 
@@ -67,7 +69,7 @@ def summarize(text,configs):
     pipe = pipeline(
         "text-generation", 
         model=model_config['model_path'], 
-        # torch_dtype=model_config['torch_dtype'],
+        torch_dtype=model_config['torch_dtype'],
         device_map=model_config['device_map'],
     )
     pipe.tokenizer.padding_side = "left"
@@ -83,7 +85,7 @@ def translate_chunks_and_save_to_srt(formatted_chunks,prompt_template,summary,co
 
     pipe = pipeline(
         "text-generation", 
-        model=model_config['model_id'], 
+        model=model_config['model_path'], 
         torch_dtype=model_config['torch_dtype'],
         device_map=model_config['device_map'],
     )
@@ -103,12 +105,17 @@ def translate_chunks_and_save_to_srt(formatted_chunks,prompt_template,summary,co
     translated_chunks = []
     for idx in tqdm(range(0, len(prompts), model_config['batch_size']), desc="Translation"):
         batch_prompts = prompts[idx:idx + model_config['batch_size']]
-        batch_results = pipe(batch_prompts, max_new_tokens=512, batch_size=model_config['batch_size'],temperature=0.001)
+        batch_results = pipe(
+            batch_prompts, 
+        max_new_tokens=model_config['max_length'], 
+        batch_size=model_config['batch_size'],
+        temperature=0.001
+        )
         for result in batch_results:
             match = re.search(r'"text":\s*"([^"]+)"', result[0]["generated_text"])
             if match:
                 translated_text = match.group(1)
-                print(translated_text)
+                print(f"translated_text:{translated_text}")
             else:
                 print("No match found")
             translated_chunks.append({
