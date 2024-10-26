@@ -1,6 +1,5 @@
 import yaml
 from src import translate_chunks_and_save_to_srt,transcribe_audio,summarize,resentence
-from utils import save_to_srt, save_to_txt
    
 
 if __name__ == "__main__":

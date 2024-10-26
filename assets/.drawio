@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="wF_EW2i-n9-67f8IHjfk" name="Page-1">
-        <mxGraphModel dx="734" dy="607" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+        <mxGraphModel dx="852" dy="607" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" background="#ffffff" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -121,7 +121,7 @@
                         <mxPoint x="720" y="350" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="55" value="&lt;p style=&quot;line-height: 50%;&quot;&gt;&lt;/p&gt;&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;span style=&quot;background-color: initial; font-size: 10px;&quot;&gt;1&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;span style=&quot;background-color: initial; font-size: 10px;&quot;&gt;00:00:00,000 --&amp;gt; 00:00:11,240&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;span style=&quot;font-size: 10px; background-color: initial;&quot;&gt;&lt;font color=&quot;#ffccff&quot;&gt;[omitted]&lt;/font&gt; the Super Alignment team at OpenAI.&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;font&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;font color=&quot;#ffccff&quot;&gt;[omitted]&amp;nbsp;&lt;/font&gt;OpenAI的超级对齐团队。&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;...&lt;br style=&quot;font-size: 17px;&quot;&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontFamily=Comic Sans MS;fontSize=18;strokeColor=none;dashed=1;" vertex="1" parent="1">
+                <mxCell id="55" value="&lt;p style=&quot;line-height: 50%;&quot;&gt;&lt;/p&gt;&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;span style=&quot;background-color: initial; font-size: 10px;&quot;&gt;1&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;span style=&quot;background-color: initial; font-size: 10px;&quot;&gt;00:00:00,000 --&amp;gt; 00:00:11,240&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;span style=&quot;font-size: 10px; background-color: initial;&quot;&gt;&lt;font color=&quot;#ffccff&quot;&gt;[omitted]&lt;/font&gt; the Super Alignment team at OpenAI.&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;font&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;font color=&quot;#ffccff&quot;&gt;[omitted]&amp;nbsp;&lt;/font&gt;OpenAI的超级对齐团队。&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;...&lt;br style=&quot;font-size: 17px;&quot;&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontFamily=Comic Sans MS;fontSize=18;strokeColor=none;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="360" y="265" width="310" height="75" as="geometry"/>
                 </mxCell>
             </root>

@@ -2,7 +2,11 @@
 
 This project generates subtitles from audio using Automatic Speech Recognition (ASR) with Whisper and translates them using the LLMs.
 
-![](./assets/pics/overview.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/pics/overview-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/pics/overview.svg">
+  <img alt="Project Overview" src="./assets/pics/overview.svg">
+</picture>
 
 ## Features
 
